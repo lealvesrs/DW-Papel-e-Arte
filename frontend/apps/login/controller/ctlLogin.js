@@ -14,7 +14,7 @@ const Login = async (req, res) =>
         return res.status(400).json({ status: "error", msg: "Dados de entrada validados" });
       };
 
-      const resp = await axios.post(process.env.SERVIDOR_PapelariaBack + "/login", formData, {
+      const resp = await axios.post(process.env.SERVIDOR_DW3Back + "/login", formData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -46,7 +46,7 @@ const Login = async (req, res) =>
       res.cookie("tempoInativoMaximoFront", process.env.tempoInativoMaximoFront, { sameSite: 'strict' });
       return res.json({ status: "ok", msg: "Login com sucesso!" });
     } else { //GET      
-      var parametros = { title: "Papelaria - Login", teste: "'192.168.13.1'", constraint: JSON.stringify(validate.constraints) }
+      var parametros = { title: "DW3 - Login", teste: "'192.168.13.1'", constraint: JSON.stringify(validate.constraints) }
       res.render("login/view/vwLogin.njk", parametros);
     }
   })();
