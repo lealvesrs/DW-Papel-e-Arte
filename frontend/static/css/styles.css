@@ -4243,6 +4243,13 @@ textarea.form-control-lg {
   margin-left: var(--bs-card-spacer-x);
 }
 
+.logo{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 .card-header {
   padding: var(--bs-card-cap-padding-y) var(--bs-card-cap-padding-x);
   margin-bottom: 0;
@@ -10880,6 +10887,7 @@ body {
 #layoutAuthentication #layoutAuthentication_content {
   min-width: 0;
   flex-grow: 1;
+  background-color:  #978169;
 }
 #layoutAuthentication #layoutAuthentication_footer {
   min-width: 0;

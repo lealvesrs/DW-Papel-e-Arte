@@ -2,8 +2,6 @@ var express = require('express');
 var router = express.Router();
 var alunosApp = require("../apps/alunos/controller/ctlAlunos")
 
-
-
 //Função necessária para evitar que usuários não autenticados acessem o sistema.
 function authenticationMiddleware(req, res, next) {
     // Verificar se existe uma sessão válida.
