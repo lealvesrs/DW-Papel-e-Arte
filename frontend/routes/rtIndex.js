@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var loginApp = require("../apps/login/controller/ctlLogin")
+var homeApp = require("../apps/home/controller/ctlHome")
 
 
 //@ Função necessária para evitar que usuários não autenticados acessem o sistema.
@@ -17,13 +18,7 @@ function authenticationMiddleware(req, res, next) {
 };
 
 /* GET home page. */
-router.get('/', authenticationMiddleware, function (req, res, next) {
-  //console.log ("[rtIndex.js|get]  session: " + req.session.userName); 
-  userName = req.session.userName;    
-  parametros = { title: 'Home', Usuario: userName };
-
-  res.render('home/view/index.njk', { parametros });
-});
+router.get('/', authenticationMiddleware, homeApp.homeController);
 
 
 /* GET login page. */
