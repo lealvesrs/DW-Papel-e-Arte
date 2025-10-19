@@ -8,7 +8,7 @@ const session = require('express-session');
 
 
 
-const envFilePath = path.resolve(__dirname, './srvPapelariaFront.env');
+const envFilePath = path.resolve(__dirname, './srvDW3Front.env');
 require('dotenv').config({ path: envFilePath });
 
 const port = process.env.PORT
@@ -44,6 +44,8 @@ app.use(
 
 //@ Descreve os grupos de rotas do SIAD
 app.use('/', rtIndex);
+app.use('/alunos', rtAlunos);
+app.use('/cursos', rtCursos);
 
 
 
