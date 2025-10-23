@@ -1,2 +1,0 @@
------ Cria um banco de dados
--- create database papelaria;
