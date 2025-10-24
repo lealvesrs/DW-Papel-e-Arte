@@ -10,7 +10,7 @@ const getAllFornecedores = (req, res) =>
 // GetFornecedorByID
 const getFornecedorByID = (req, res) =>
   (async () => {
-    const fornecedorID = parseInt(req.body.fornecedorid);
+    const fornecedorID = parseInt(req.body.fornecedor_id);
     const registro = await mdlFornecedores.getFornecedorByID(fornecedorID);
     res.json({ status: "ok", registro });
   })();
@@ -26,7 +26,7 @@ const insertFornecedores = (req, res) =>
 // UpdateFornecedores
 const updateFornecedores = (req, res) =>
   (async () => {
-    const registro = req.body; // fornecedorid, nome, telefone, endereco
+    const registro = req.body; // fornecedor_id, nome, telefone, endereco
     const { msg, linhasAfetadas } = await mdlFornecedores.updateFornecedores(registro);
     res.json({ status: msg, linhasAfetadas });
   })();
@@ -34,7 +34,7 @@ const updateFornecedores = (req, res) =>
 // DeleteFornecedores 
 const deleteFornecedores = (req, res) =>
   (async () => {
-    const registro = req.body; //  fornecedorid
+    const registro = req.body; //  fornecedor_id
     const { msg, linhasAfetadas } = await mdlFornecedores.deleteFornecedores(registro);
     res.json({ status: msg, linhasAfetadas });
   })();

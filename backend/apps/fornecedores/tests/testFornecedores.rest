@@ -24,7 +24,7 @@ content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "fornecedorid": 1
+  "fornecedor_id": 1
 }
 
 ### teste de inserção de fornecedor
@@ -44,7 +44,7 @@ content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "fornecedorid": 3,
+  "fornecedor_id": 3,
   "nome": "Fornecedor REST Atualizado",
   "telefone": "+55 43 98888-7777",
   "endereco": "Av. Atualizada, 456"
@@ -56,5 +56,5 @@ content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "fornecedorid": 3
+  "fornecedor_id": 3
 }

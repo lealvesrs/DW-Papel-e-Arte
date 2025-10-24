@@ -54,7 +54,7 @@ const updateFornecedores = async (registroPar) => {
           "endereco = $4 " +
           "WHERE id = $1",
         [
-          registroPar.fornecedorid, // id do fornecedor
+          registroPar.fornecedor_id, // id do fornecedor
           registroPar.nome,
           registroPar.telefone ?? null,
           registroPar.endereco ?? null,
@@ -76,7 +76,7 @@ const deleteFornecedores = async (registroPar) => {
     linhasAfetadas = (
       await db.query(
         "UPDATE fornecedores SET removido = TRUE WHERE id = $1",
-        [registroPar.fornecedorid] // usando o ID do fornecedor
+        [registroPar.fornecedor_id] // usando o ID do fornecedor
       )
     ).rowCount;
   } catch (error) {

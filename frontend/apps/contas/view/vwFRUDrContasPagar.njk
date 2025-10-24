@@ -1,0 +1,137 @@
+{% extends "templates/base.html" %}
+
+{% block content %}
+  <div x-data="contaPagarForm()">
+    <ol class="breadcrumb mb-2">
+      <li class="breadcrumb-item active">{{title}}</li>
+    </ol>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+        <div class="card-body">
+          <form>
+            <div class="row">
+                            <div class="col-12">
+                <div class="form-group">
+                  <label for="fornecedor_id">Fornecedor</label>
+                  <select class="form-select" id="fornecedor_id" x-model="form.fornecedor_id" :disabled="disabled">
+                    {% for forn in fornecedor %}
+                      <option value="{{forn.id}}" {% if data.fornecedor_id == forn.id %}selected{% endif %}>
+                        {{forn.nome}}
+                      </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-group">
+                  <label for="descricao">Descrição</label>
+                  <input type="text" class="form-control" id="descricao" x-model="form.descricao" :disabled="disabled">
+                </div>
+              </div>
+
+                            <div class="col-md-6">
+                <div class="form-group">
+                  <label for="valor">Valor (R$)</label>
+                  <input type="number" step="0.01" class="form-control" id="valor" x-model="form.valor" :disabled="disabled">
+                </div>
+              </div>
+
+                            <div class="col-md-6">
+                <div class="form-group">
+                  <label for="data_vencimento">Data de Vencimento</label>
+                  <input type="date" class="form-control" id="data_vencimento" x-model="form.data_vencimento" :disabled="disabled">
+                </div>
+              </div>
+            </div>
+          
+            <button type="button" @click="updateForm()" class="btn btn-brown mt-4" x-show="!disabled">Salvar</button>
+            <button type="button" @click="deleteForm()" x-show="!disabled" class="btn btn-danger mt-4">Excluir</button>
+            <a href="/contas/manutContasPagar" class="btn btn-info mt-4 ml-2" role="button" aria-disabled="true">Retornar</a>
+          </form>
+
+          <div class="mt-3">
+            <template x-if="message">
+              <div :class="messageClass" x-text="message"></div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.onload = function () {
+      windowOnLoad();
+      const localErro = "{{erro}}";
+      if (localErro != "") {
+        alert("[vwContasPagar|onload]Servidor retornou o erro:" + localErro);
+      }
+      $("#descricao").focus();
+    };
+
+    function contaPagarForm() {
+      return {
+        form: {
+          contapagarid: "{{data.id }}",
+          fornecedor_id: "{{data.fornecedor_id}}",
+          descricao: "{{data.descricao}}",
+          valor: "{{data.valor}}",
+          data_vencimento: "{{data.data_vencimento}}",
+          removido: false
+        },
+        message: '',
+        messageClass: '',
+        disabled: {{disabled}},
+
+        async updateForm() {
+          try {
+            const response = await fetch('/contas/UpdateContasPagar', {
+              method: 'POST',
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(this.form)
+            });
+
+            const result = await response.json();
+            if (result.status == "ok") {
+              alert("Conta a pagar atualizada com sucesso!");
+            } else {
+              // Usa result.msg se disponível, ou result.status como fallback
+              const errorData = result.msg || result.status; 
+              this.message = `Erro ao atualizar a Conta a Pagar: ${errorData}`;
+              this.messageClass = 'alert alert-danger';
+            }
+          } catch (error) {
+            this.message = `Erro de conexão: ${error.message}`;
+            this.messageClass = 'alert alert-danger';
+          }
+        },
+
+        async deleteForm() {
+          try {
+            const response = await fetch('/contas/DeleteContasPagar', {
+              method: 'POST',
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(this.form)
+            });
+
+            const result = await response.json();
+            if (result.status == "ok") {
+              alert("Conta a pagar excluída com sucesso!");
+              window.location.href = "/contas/manutContasPagar";
+            } else {
+              // Usa result.msg se disponível, ou result.status como fallback
+              const errorData = result.msg || result.status; 
+              this.message = `Erro ao excluir a Conta a Pagar: ${errorData}`;
+              this.messageClass = 'alert alert-danger';
+            }
+          } catch (error) {
+            this.message = `Erro de conexão: ${error.message}`;
+            this.messageClass = 'alert alert-danger';
+          }
+        }
+      };
+    }
+  </script>
+{% endblock %}

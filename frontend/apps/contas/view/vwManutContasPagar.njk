@@ -11,21 +11,21 @@
       <div class="card-body">
         <div class="">
           <div style="margin-bottom: 15px;">
-            <a href="/alunos/insertAlunos" class="btn btn-brown">
-              Inserir nova conta à pagar
+            <a href="/contas/insertContasPagar" class="btn btn-brown">
+              Inserir nova conta a pagar
             </a>
           </div>
 
           <div style="background-color: #e9e7dc">
-            <table id="tabAlunos" class="display" style="width:100%">
+            <table id="tabContasPagar" class="display" style="width:100%">
               <thead>
                 <tr>
                   <th>Ação</th>
-                  <th>Prontuário</th>
-                  <th>Nome</th>
-                  <th>Endereço</th>
-                  <th>datanascimento</th>
-                  <th>Curso</th>
+                  <th>ID</th>
+                  <th>Descrição</th>
+                  <th>Valor</th>
+                  <th>Vencimento</th>
+                  <th>Fornecedor ID</th>
                 </tr>
               </thead>
               <tbody>
@@ -33,20 +33,20 @@
                   <tr>
                     <td>
                       {# Link para visualização dos dados #}
-                      <a href="/alunos/viewAlunos/{{ reg.alunoid }}"  title="Visualizar">
+                      <a href="/contas/viewContasPagar/{{ reg.id }}"  title="Visualizar">
                         <i class="fas fa-search"></i>
                       </a>
 
-                      {# Link para atualuzação e remoção dos dados#}
-                      <a href="/alunos/UpdateAlunos/{{ reg.alunoid }}" title="Atualizar" style="margin-left: 10px;">
+                      {# Link para atualização e remoção dos dados#}
+                      <a href="/contas/UpdateContasPagar/{{ reg.id }}" title="Atualizar" style="margin-left: 10px;">
                         <i class="fas fa-pencil-alt"></i>
                       </a>
                     </td>
-                    <td>{{reg.prontuario}}</td>
-                    <td>{{reg.nome}}</td>
-                    <td>{{reg.endereco}}</td>
-                    <td>{{reg.datanascimento}}</td>
+                    <td>{{reg.id}}</td>
                     <td>{{reg.descricao}}</td>
+                    <td>{{reg.valor}}</td>
+                    <td>{{reg.data_vencimento}}</td>
+                    <td>{{reg.fornecedor_id}}</td>
                   </tr>
                 {% endfor %}
               </tbody>
@@ -66,10 +66,10 @@
       //@ Caso tenha dado erro no servidor frontEnd, ele será mostrado aqui.
       const localErro = "{{erro}}";
       if (localErro != "") {
-        alert("[vwAlunos|onload]Servidor retornou o erro:" + localErro);
+        alert("[vwContasPagar|onload]Servidor retornou o erro:" + localErro);
       }
 
-      new DataTable('#tabAlunos');
+      new DataTable('#tabContasPagar');
     };
   </script>
 
