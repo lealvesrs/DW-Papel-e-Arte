@@ -4,14 +4,14 @@ const homeController = async (req, res) => { // Removido o embrulho desnecessár
   const token = req.session.token;
 
   // Variáveis que virão do banco/API
-  let alunos_count = 0; // Contagem de alunos
+  let contas_count = 0; // Contagem de contas
   let vencidas_count = 0;
   let a_pagar_count = 0;
   let remoteMSG = null;
 
   try {
-    // 1. Chamada para Contagem de Alunos (Fornecedores Cadastrados)
-    const alunosResp = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllAlunos", {
+    // 1. Chamada para Contagem de ContasPagar (Fornecedores Cadastrados)
+    const contasResp = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllContasPagar", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
@@ -19,8 +19,8 @@ const homeController = async (req, res) => { // Removido o embrulho desnecessár
     });
 
     // 2. CONTAGEM
-    if (alunosResp.data.registro && Array.isArray(alunosResp.data.registro)) {
-      alunos_count = alunosResp.data.registro.length;
+    if (contasResp.data.registro && Array.isArray(contasResp.data.registro)) {
+      contas_count = contasResp.data.registro.length;
     }
     
 
@@ -42,7 +42,7 @@ const homeController = async (req, res) => { // Removido o embrulho desnecessár
     erro: remoteMSG, 
     vencidas_count: vencidas_count, 
     a_pagar_count: a_pagar_count, 
-    fornecedores_count: alunos_count, 
+    fornecedores_count: contas_count, 
   };
 
   res.render("home/view/index.njk", { parametros });
