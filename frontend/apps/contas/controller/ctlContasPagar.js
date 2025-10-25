@@ -12,7 +12,7 @@ const manutContasPagar = async (req, res) =>
     let remoteMSG = null;
     let resp = null;
     try {
-        resp = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllContasPagar", {
+        resp = await axios.get(process.env.SERVIDOR_DW3Back + "/GetAllContasPagar", {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}` // Set JWT token in the header
@@ -66,8 +66,8 @@ const insertContasPagar = async (req, res) =>
         return res.render("contas/view/vwFCrContasPagar.njk", {
             title: "Cadastro de Contas a Pagar",
             data: null,
-            erro: `Erro ao carregar fornecedores: ${error.message}`,
-            fornecedores: null, // MUDANÇA: conta -> fornecedores
+            erro: `Erro ao carregar fornecedor: ${error.message}`,
+            fornecedor: null, 
             userName: null,
           });
       }
@@ -127,17 +127,15 @@ const ViewContasPagar = async (req, res) =>
     const userName = req.session.userName;
     const token = req.session.token;
     let response = null;
-    let oper = null;
     try {
       if (req.method == "GET") {
         const id = req.params.id;
-        oper = req.params.oper;
         parseInt(id);
 
         response = await axios.post(
-          process.env.SERVIDOR_DW3Back + "/getContaPagarByID",
+          process.env.SERVIDOR_DW3Back + "/GetContaPagarByID",
           {
-            contaPagarid: id,
+            contapagarid: id,
           },
           {
             headers: {
@@ -146,11 +144,11 @@ const ViewContasPagar = async (req, res) =>
             },
           }
         );
-        // console.log('[ctlContasPagar|ViewContasPagar] Dados retornados:', response.data);
+
         if (response.data.status == "ok") {
           //@ Busca os fornecedores disponíveis
           const fornecedores = await axios.get(
-            process.env.SERVIDOR_DW3Back + "/GetAllFornecedores", { // MUDANÇA: /GetAllCursos -> /GetAllFornecedores
+            process.env.SERVIDOR_DW3Back + "/GetAllFornecedores", { 
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}` // Set JWT token in the header
@@ -162,10 +160,10 @@ const ViewContasPagar = async (req, res) =>
           );
 
           res.render("contas/view/vwFRUDrContasPagar.njk", {
-            title: "Visualização de Contas a Pagar", // MUDANÇA: contas -> Contas a Pagar
+            title: "Visualização de Contas a Pagar",
             data: response.data.registro[0],
             disabled: true,
-            fornecedores: fornecedores.data.registro, // MUDANÇA: conta -> fornecedor (no frontend)
+            fornecedor: fornecedores.data.registro, 
             userName: userName,
           });
         } else {
@@ -194,9 +192,9 @@ const UpdateContaPagar = async (req, res) =>
         parseInt(id);
 
         response = await axios.post(
-          process.env.SERVIDOR_DW3Back + "/getContaPagarByID",
+          process.env.SERVIDOR_DW3Back + "/GetContaPagarByID",
           {
-            contaPagarid: id,
+            contapagarid: id,
           },
           {
             headers: {
@@ -209,7 +207,7 @@ const UpdateContaPagar = async (req, res) =>
         if (response.data.status == "ok") {
           //@ Busca os fornecedores disponíveis
           const fornecedores = await axios.get(
-            process.env.SERVIDOR_DW3Back + "/GetAllFornecedores", { // MUDANÇA: /GetAllCursos -> /GetAllFornecedores
+            process.env.SERVIDOR_DW3Back + "/GetAllFornecedores", { 
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}` // Set JWT token in the header
@@ -221,10 +219,10 @@ const UpdateContaPagar = async (req, res) =>
           );
 
           res.render("contas/view/vwFRUDrContasPagar.njk", {
-            title: "Atualização de dados de Contas a Pagar", // MUDANÇA: contas -> Contas a Pagar
+            title: "Atualização de dados de Contas a Pagar", 
             data: response.data.registro[0],
             disabled: false,
-            fornecedor: fornecedores.data.registro, // MUDANÇA: conta -> fornecedor (no frontend)
+            fornecedor: fornecedores.data.registro, 
             userName: userName,
           });
         } else {
