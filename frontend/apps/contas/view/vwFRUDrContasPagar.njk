@@ -6,12 +6,12 @@
       <li class="breadcrumb-item active">{{title}}</li>
     </ol>
 
-        <div class="row justify-content-center">
-            <div class="col-md-6">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
         <div class="card-body">
           <form>
             <div class="row">
-                            <div class="col-12">
+              <div class="col-12">
                 <div class="form-group">
                   <label for="fornecedor_id">Fornecedor</label>
                   <select class="form-select" id="fornecedor_id" x-model="form.fornecedor_id" :disabled="disabled">
@@ -24,10 +24,17 @@
                 </div>
               </div>
 
-              <div class="col-12">
+              <div class="col-10">
                 <div class="form-group">
                   <label for="descricao">Descrição</label>
                   <input type="text" class="form-control" id="descricao" x-model="form.descricao" :disabled="disabled">
+                </div>
+              </div>
+
+              <div class="col-2">
+                <div class="form-group">
+                    <label for="id">Código</label>
+                    <input type="text" class="form-control" id="id" x-model="form.contapagarid" disabled>
                 </div>
               </div>
 

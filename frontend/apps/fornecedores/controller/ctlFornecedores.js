@@ -1,14 +1,14 @@
 const axios = require("axios");
 
-// Listagem/manutenção de cursos
-const manutCursos = async (req, res) =>
+// Listagem/manutenção de fornecedores
+const manutFornecedores = async (req, res) =>
   (async () => {
     const userName = req.session.userName;
     const token = req.session.token;
 
     try {
       const resp = await axios.get(
-        process.env.SERVIDOR_DW3Back + "/GetAllCursos",
+        process.env.SERVIDOR_DW3Back + "/GetAllFornecedores",
         {
           headers: {
             "Content-Type": "application/json",
@@ -18,8 +18,8 @@ const manutCursos = async (req, res) =>
         }
       );
 
-      res.render("cursos/view/vwManutCursos.njk", {
-        title: "Manutenção de cursos",
+      res.render("fornecedores/view/vwManutFornecedores.njk", {
+        title: "Manutenção de fornecedores",
         data: resp.data.registro,
         erro: null,
         userName: userName,
@@ -34,8 +34,8 @@ const manutCursos = async (req, res) =>
         remoteMSG = error.message || "Erro inesperado";
       }
 
-      res.render("cursos/view/vwManutCursos.njk", {
-        title: "Manutenção de cursos",
+      res.render("fornecedores/view/vwManutFornecedores.njk", {
+        title: "Manutenção de fornecedores",
         data: null,
         erro: remoteMSG,
         userName: userName,
@@ -43,15 +43,15 @@ const manutCursos = async (req, res) =>
     }
   })();
 
-// Criação de cursos
-const insertCursos = async (req, res) =>
+// Criação de fornecedores
+const insertFornecedores = async (req, res) =>
   (async () => {
     const token = req.session.token;
 
     if (req.method === "GET") {
       // Abre formulário de criação
-      return res.render("cursos/view/vwFCrCursos.njk", {
-        title: "Cadastro de cursos",
+      return res.render("fornecedores/view/vwFCrFornecedores.njk", {
+        title: "Cadastro de fornecedores",
         data: null,
         erro: null,
         userName: null,
@@ -63,7 +63,7 @@ const insertCursos = async (req, res) =>
 
     try {
       const response = await axios.post(
-        process.env.SERVIDOR_DW3Back + "/InsertCursos",
+        process.env.SERVIDOR_DW3Back + "/InsertFornecedores",
         regData,
         {
           headers: {
@@ -90,8 +90,8 @@ const insertCursos = async (req, res) =>
     }
   })();
 
-// Visualização (read-only) de curso
-const ViewCursos = async (req, res) =>
+// Visualização (read-only) de fornecedor
+const ViewFornecedores = async (req, res) =>
   (async () => {
     const userName = req.session.userName;
     const token = req.session.token;
@@ -101,8 +101,8 @@ const ViewCursos = async (req, res) =>
         const id = parseInt(req.params.id);
 
         const response = await axios.post(
-          process.env.SERVIDOR_DW3Back + "/GetCursoByID",
-          { cursoid: id },
+          process.env.SERVIDOR_DW3Back + "/GetFornecedorByID",
+          { fornecedor_id: id },
           {
             headers: {
               "Content-Type": "application/json",
@@ -113,23 +113,23 @@ const ViewCursos = async (req, res) =>
         );
 
         if (response.data.status === "ok" && response.data.registro?.[0]) {
-          res.render("cursos/view/vwFRUDrCursos.njk", {
-            title: "Visualização de cursos",
+          res.render("fornecedores/view/vwFRUDrFornecedores.njk", {
+            title: "Visualização de fornecedores",
             data: response.data.registro[0],
             disabled: true,
             userName: userName,
           });
         } else {
-          res.json({ status: "[ctlCursos|ViewCursos] Curso não localizado!" });
+          res.json({ status: "[ctlFornecedores|ViewFornecedores] Fornecedor não localizado!" });
         }
       }
     } catch (erro) {
-      res.json({ status: "[ctlCursos|ViewCursos] Erro não identificado!" });
+      res.json({ status: "[ctlFornecedores|ViewFornecedores] Erro não identificado!" });
     }
   })();
 
-// Atualização de curso
-const UpdateCurso = async (req, res) =>
+// Atualização de fornecedor
+const UpdateFornecedor = async (req, res) =>
   (async () => {
     const userName = req.session.userName;
     const token = req.session.token;
@@ -139,8 +139,8 @@ const UpdateCurso = async (req, res) =>
         const id = parseInt(req.params.id);
 
         const response = await axios.post(
-          process.env.SERVIDOR_DW3Back + "/GetCursoByID",
-          { cursoid: id },
+          process.env.SERVIDOR_DW3Back + "/GetFornecedorByID",
+          { fornecedor_id: id },
           {
             headers: {
               "Content-Type": "application/json",
@@ -151,14 +151,14 @@ const UpdateCurso = async (req, res) =>
         );
 
         if (response.data.status === "ok" && response.data.registro?.[0]) {
-          res.render("cursos/view/vwFRUDrCursos.njk", {
-            title: "Atualização de cursos",
+          res.render("fornecedores/view/vwFRUDrFornecedores.njk", {
+            title: "Atualização de fornecedores",
             data: response.data.registro[0],
             disabled: false,
             userName: userName,
           });
         } else {
-          res.json({ status: "[ctlCursos|UpdateCurso] Dados não localizados" });
+          res.json({ status: "[ctlFornecedores|UpdateFornecedor] Dados não localizados" });
         }
       } else {
         // POST: atualiza
@@ -166,7 +166,7 @@ const UpdateCurso = async (req, res) =>
 
         try {
           const response = await axios.post(
-            process.env.SERVIDOR_DW3Back + "/UpdateCursos",
+            process.env.SERVIDOR_DW3Back + "/UpdateFornecedores",
             regData,
             {
               headers: {
@@ -193,19 +193,19 @@ const UpdateCurso = async (req, res) =>
         }
       }
     } catch (erro) {
-      res.json({ status: "[ctlCursos|UpdateCurso] Erro não identificado!" });
+      res.json({ status: "[ctlFornecedores|UpdateFornecedor] Erro não identificado!" });
     }
   })();
 
-// Exclusão de curso
-const DeleteCurso = async (req, res) =>
+// Exclusão de fornecedor
+const DeleteFornecedor = async (req, res) =>
   (async () => {
     const token = req.session.token;
     const regData = req.body;
 
     try {
       const response = await axios.post(
-        process.env.SERVIDOR_DW3Back + "/DeleteCursos",
+        process.env.SERVIDOR_DW3Back + "/DeleteFornecedores",
         regData,
         {
           headers: {
@@ -233,9 +233,9 @@ const DeleteCurso = async (req, res) =>
   })();
 
 module.exports = {
-  manutCursos,
-  insertCursos,
-  ViewCursos,
-  UpdateCurso,
-  DeleteCurso,
+  manutFornecedores,
+  insertFornecedores,
+  ViewFornecedores,
+  UpdateFornecedor,
+  DeleteFornecedor,
 };

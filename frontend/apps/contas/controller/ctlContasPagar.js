@@ -53,7 +53,7 @@ const insertContasPagar = async (req, res) =>
       let fornecedores = null;
       try {
         fornecedores = await axios.get(
-          process.env.SERVIDOR_DW3Back + "/GetAllFornecedores", { // MUDANÇA: /GetAllCursos -> /GetAllFornecedores
+          process.env.SERVIDOR_DW3Back + "/GetAllFornecedores", { // MUDANÇA: /GetAllFornecedores -> /GetAllFornecedores
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}` // Set JWT token in the header
