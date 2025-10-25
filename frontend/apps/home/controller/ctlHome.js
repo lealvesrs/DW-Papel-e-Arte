@@ -1,16 +1,14 @@
-const axios = require("axios"); // <--- AQUI DEVE ESTAR A IMPORTAÇÃO
+const axios = require("axios");
 
-const homeController = async (req, res) => { // Removido o embrulho desnecessário (async () => { ... })()
+const homeController = async (req, res) => { 
   const token = req.session.token;
 
-  // Variáveis que virão do banco/API
-  let contas_count = 0; // Contagem de contas
   let vencidas_count = 0;
   let a_pagar_count = 0;
   let remoteMSG = null;
 
   try {
-    // 1. Chamada para Contagem de ContasPagar (Fornecedores Cadastrados)
+
     const contasResp = await axios.get(process.env.SERVIDOR_DW3Back + "/GetAllContasPagar", {
       headers: {
         "Content-Type": "application/json",
@@ -18,14 +16,23 @@ const homeController = async (req, res) => { // Removido o embrulho desnecessár
       }
     });
 
-    // 2. CONTAGEM
     if (contasResp.data.registro && Array.isArray(contasResp.data.registro)) {
-      contas_count = contasResp.data.registro.length;
+      const dataAtual = new Date();
+      
+      contasResp.data.registro.forEach((conta) => {
+        const dataVencimento = new Date(conta.data_vencimento);
+        
+        if (dataVencimento < dataAtual) {
+          vencidas_count++;
+        } 
+        else{
+          a_pagar_count++;
+        }
+      });
     }
     
 
   } catch (error) {
-    // Tratamento de erros
     if (error.code === "ECONNREFUSED") {
       remoteMSG = "Servidor backend indisponível";
     } else if (error.response && error.response.status === 401) {
@@ -36,17 +43,28 @@ const homeController = async (req, res) => { // Removido o embrulho desnecessár
     }
   }
 
-  // 3. Renderiza o template da Home, PASSANDO AS VARIÁVEIS CALCULADAS
+
   const parametros = { 
     title: "Página Inicial",
     erro: remoteMSG, 
     vencidas_count: vencidas_count, 
     a_pagar_count: a_pagar_count, 
-    fornecedores_count: contas_count, 
+    fornecedores_count: await totalFornecedores(token), 
   };
 
   res.render("home/view/index.njk", { parametros });
 };
+
+async function totalFornecedores(token){
+  const fornResp = await axios.get(process.env.SERVIDOR_DW3Back + "/GetAllFornecedores", {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return fornResp.data.registro.length;
+}
 
 module.exports = {
   homeController,

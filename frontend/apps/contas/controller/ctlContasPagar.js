@@ -7,6 +7,7 @@ const manutContasPagar = async (req, res) =>
     //@ Abre o formulário de manutenção de contas
     const userName = req.session.userName;
     const token = req.session.token;
+    const hoje = moment().format("DD/MM/YYYY");
     //console.log("[ctlContasPagar|ManutContasPagar] Valor token:" + token)
     // try {
     let remoteMSG = null;
@@ -17,6 +18,9 @@ const manutContasPagar = async (req, res) =>
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}` // Set JWT token in the header
             }
+        });
+        resp.data.registro.forEach((conta) => {
+            conta.data_vencimento = moment(conta.data_vencimento).format("DD/MM/YYYY");
         });
     } catch (error) {
         if (error.code === "ECONNREFUSED") {
@@ -32,6 +36,7 @@ const manutContasPagar = async (req, res) =>
             data: null,
             erro: remoteMSG, //@ Caso tenha da erro, a mensagem será mostrada na página html como um Alert
             userName: userName,
+            hoje: hoje,
         });
         return; // Sai se houver erro
     }
@@ -41,6 +46,7 @@ const manutContasPagar = async (req, res) =>
       data: resp.data.registro,
       erro: remoteMSG,
       userName: userName,
+      hoje: hoje,
     });
   })();
 
@@ -48,6 +54,7 @@ const insertContasPagar = async (req, res) =>
   (async () => {
     if (req.method == "GET") {
       const token = req.session.token;
+      const hoje = moment().format("DD/MM/YYYY");
 
       //@ Busca os fornecedores disponíveis
       let fornecedores = null;
@@ -69,6 +76,7 @@ const insertContasPagar = async (req, res) =>
             erro: `Erro ao carregar fornecedor: ${error.message}`,
             fornecedor: null, 
             userName: null,
+            hoje: hoje,
           });
       }
 
@@ -79,12 +87,14 @@ const insertContasPagar = async (req, res) =>
         erro: null, //@ Caso tenha da erro, a mensagem será mostrada na página html como um Alert
         fornecedor: fornecedores.data.registro, // MUDANÇA: conta -> fornecedor (no frontend)
         userName: null,
+        hoje: hoje,
       });
 
     } else {
       //@ POST
       const regData = req.body;
       const token = req.session.token;
+      const hoje = moment().format("DD/MM/YYYY");
 
       try {
         // @ Enviando dados para o servidor Backend
@@ -103,6 +113,7 @@ const insertContasPagar = async (req, res) =>
           msg: response.data.status,
           data: response.data,
           erro: null,
+          hoje: hoje,
         });
       } catch (error) {
         let msg = 'Erro ao inserir dados no servidor backend';
@@ -117,6 +128,7 @@ const insertContasPagar = async (req, res) =>
           msg: msg,
           data: null,
           erro: null,
+          hoje: hoje,
         });
       }
     }
@@ -126,6 +138,7 @@ const ViewContasPagar = async (req, res) =>
   (async () => {
     const userName = req.session.userName;
     const token = req.session.token;
+    const hoje = moment().format("DD/MM/YYYY");
     let response = null;
     try {
       if (req.method == "GET") {
@@ -165,6 +178,7 @@ const ViewContasPagar = async (req, res) =>
             disabled: true,
             fornecedor: fornecedores.data.registro, 
             userName: userName,
+            hoje: hoje
           });
         } else {
           console.log("[ctlContasPagar|ViewContasPagar] ID de Conta não localizada!");
@@ -185,6 +199,7 @@ const UpdateContaPagar = async (req, res) =>
   (async () => {
     const userName = req.session.userName;
     const token = req.session.token;
+    const hoje = moment().format("DD/MM/YYYY");
     let response = null;
     try {
       if (req.method == "GET") {
@@ -214,9 +229,7 @@ const UpdateContaPagar = async (req, res) =>
             }
           });
 
-          response.data.registro[0].data_vencimento = moment(response.data.registro[0].data_vencimento).format(
-            "YYYY-MM-DD"
-          );
+          response.data.registro[0].data_vencimento = moment(response.data.registro[0].data_vencimento).format("YYYY-MM-DD");
 
           res.render("contas/view/vwFRUDrContasPagar.njk", {
             title: "Atualização de dados de Contas a Pagar", 
@@ -224,6 +237,7 @@ const UpdateContaPagar = async (req, res) =>
             disabled: false,
             fornecedor: fornecedores.data.registro, 
             userName: userName,
+            hoje: hoje
           });
         } else {
           console.log("[ctlContasPagar|UpdateContaPagar] Dados não localizados");
@@ -251,6 +265,7 @@ const UpdateContaPagar = async (req, res) =>
             msg: response.data.status,
             data: response.data,
             erro: null,
+            hoje: hoje,
           });
         } catch (error) {
           let msg = 'Erro ao atualizar dados de contas no servidor backend';
@@ -265,6 +280,7 @@ const UpdateContaPagar = async (req, res) =>
             msg: msg,
             data: null,
             erro: null,
+            hoje: hoje,
           });
         }
       }
@@ -283,6 +299,7 @@ const DeleteContaPagar = async (req, res) =>
     //@ POST
     const regData = req.body;
     const token = req.session.token;
+    const hoje = moment().format("DD/MM/YYYY");
     //console.log("[ctlContasPagar|DeleteContaPagar] Valor regData:", JSON.stringify(regData));
 
     try {
@@ -302,6 +319,7 @@ const DeleteContaPagar = async (req, res) =>
         msg: response.data.status,
         data: response.data,
         erro: null,
+        hoje: hoje,
       });
     } catch (error) {
       let msg = 'Erro ao deletar dados de contas no servidor backend';
@@ -316,6 +334,7 @@ const DeleteContaPagar = async (req, res) =>
         msg: msg,
         data: null,
         erro: null,
+        hoje: hoje,
       });
     }
   })();

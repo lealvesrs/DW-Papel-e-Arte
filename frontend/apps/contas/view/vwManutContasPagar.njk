@@ -43,15 +43,20 @@
                       </a>
                     </td>
                     <td>{{reg.id}}</td>
-                    <td>{{reg.descricao}}</td>
+                    <td>{{reg.descricao}} {{hoje}}</td>
                     <td>{{reg.valor}}</td>
-                    <td>{{reg.data_vencimento}}</td>
+                    <td>
+                      {% if reg.data_vencimento < hoje %}
+                        <span style="color:red;">{{ reg.data_vencimento }} (Vencida)</span>
+                      {% else %}
+                        {{ reg.data_vencimento }}
+                      {% endif %}
+                    </td>
                     <td>{{reg.fornecedor_id}}</td>
                   </tr>
                 {% endfor %}
               </tbody>
             </table>
-
           </div>
 
         </div>
