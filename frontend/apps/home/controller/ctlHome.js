@@ -11,7 +11,7 @@ const homeController = async (req, res) => { // Removido o embrulho desnecessár
 
   try {
     // 1. Chamada para Contagem de ContasPagar (Fornecedores Cadastrados)
-    const contasResp = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllContasPagar", {
+    const contasResp = await axios.get(process.env.SERVIDOR_DW3Back + "/GetAllContasPagar", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
