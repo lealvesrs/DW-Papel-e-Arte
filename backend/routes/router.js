@@ -17,14 +17,14 @@ routerApp.get("/", (req, res) => {
 routerApp.post("/Login",  appLogin.Login);
 routerApp.post("/Logout", appLogin.Logout);
 
-// Rotas de Fornecedores
+// Rotas de Fornecedores com autenticação JWT
 routerApp.get ("/GetAllFornecedores",  appLogin.AutenticaJWT, appFornecedores.getAllFornecedores);
 routerApp.post("/GetFornecedorByID",   appLogin.AutenticaJWT, appFornecedores.getFornecedorByID);
 routerApp.post("/InsertFornecedores",  appLogin.AutenticaJWT, appFornecedores.insertFornecedores);
 routerApp.post("/UpdateFornecedores",  appLogin.AutenticaJWT, appFornecedores.updateFornecedores);
 routerApp.post("/DeleteFornecedores",  appLogin.AutenticaJWT, appFornecedores.deleteFornecedores);
 
-// Rotas de Contas a Pagar
+// Rotas de Contas a Pagar com autenticação JWT
 routerApp.get ("/GetAllContasPagar",   appLogin.AutenticaJWT, appContas_Pagar.getAllContasPagar);
 routerApp.post("/GetContaPagarByID",   appLogin.AutenticaJWT, appContas_Pagar.getContaPagarByID);
 routerApp.post("/InsertContasPagar",   appLogin.AutenticaJWT, appContas_Pagar.insertContasPagar);
