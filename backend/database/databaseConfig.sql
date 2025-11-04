@@ -1,12 +1,6 @@
------ Cria um banco de dados
--- =========================================================
--- EXTENSÕES ÚTEIS
--- =========================================================
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
--- =========================================================
--- AUTENTICAÇÃO (necessária para o /Login dos testes)
--- =========================================================
+
 CREATE TABLE IF NOT EXISTS usuarios (
   usuarioid BIGSERIAL CONSTRAINT pk_usuarios PRIMARY KEY,
   username  VARCHAR(50) UNIQUE,
@@ -20,9 +14,7 @@ VALUES
   ('qwe',   crypt('qwe',   gen_salt('bf')))  
 ON CONFLICT (username) DO NOTHING;
 
--- =========================================================
--- TABELAS DO MÓDULO (Fornecedores / Contas a Pagar)
--- =========================================================
+
 
 -- Fornecedores
 CREATE TABLE IF NOT EXISTS fornecedores (
@@ -47,24 +39,9 @@ CREATE TABLE IF NOT EXISTS contas_pagar (
   removido         BOOLEAN NOT NULL DEFAULT FALSE
 );
 
--- =========================================================
--- ÍNDICES
--- =========================================================
-CREATE INDEX IF NOT EXISTS idx_fornecedores_ativos
-  ON fornecedores (id) WHERE removido = FALSE;
 
-CREATE INDEX IF NOT EXISTS idx_contas_pagar_fornecedor
-  ON contas_pagar (fornecedor_id);
 
-CREATE INDEX IF NOT EXISTS idx_contas_pagar_vencimento
-  ON contas_pagar (data_vencimento);
 
-CREATE INDEX IF NOT EXISTS idx_contas_pagar_ativas
-  ON contas_pagar (fornecedor_id, data_vencimento) WHERE removido = FALSE;
-
--- =========================================================
--- DADOS DE EXEMPLO PARA RODAR OS TESTES
--- =========================================================
 
 -- Insert Fornecedores 
 INSERT INTO fornecedores (nome, telefone, endereco, removido)
@@ -82,9 +59,7 @@ VALUES
   ((SELECT id FROM fornecedores ORDER BY id ASC OFFSET 1 LIMIT 1), 'Cartuchos color',  320.50, CURRENT_DATE + INTERVAL '20 day', FALSE)
 ON CONFLICT DO NOTHING;
 
--- =========================================================
--- CONSULTAS RÁPIDAS
--- =========================================================
+
 
 -- Fornecedores ativos
 SELECT * FROM fornecedores WHERE removido = FALSE ORDER BY nome;
